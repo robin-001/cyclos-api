@@ -1,13 +1,21 @@
 # Cyclos API Laravel Package
 
-This Laravel package provides a convenient way to interact with the Cyclos API.
+A Laravel package that provides a clean and intuitive way to interact with the Cyclos API.
+
+## Features
+
+- Full Cyclos API support
+- Laravel integration
+- Type-safe methods
+- Comprehensive test coverage
+- Easy configuration
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require robinson/cyclos-api
+composer require angstrom/cyclos-api
 ```
 
 ## Configuration
@@ -15,29 +23,90 @@ composer require robinson/cyclos-api
 Publish the configuration file:
 
 ```bash
-php artisan vendor:publish --provider="Robinson\CyclosApi\CyclosApiServiceProvider"
+php artisan vendor:publish --provider="Angstrom\CyclosApi\CyclosApiServiceProvider"
 ```
 
 Add the following environment variables to your `.env` file:
 
 ```env
-CYCLOS_API_URL=http://13.61.126.103:8080/cyclos/api
+CYCLOS_API_URL=your-cyclos-api-url
 CYCLOS_API_KEY=your-api-key
 ```
 
 ## Usage
 
-You can use the facade to interact with the Cyclos API:
+### Using the Facade
 
 ```php
-use Robinson\CyclosApi\Facades\CyclosApi;
+use Angstrom\CyclosApi\Facades\CyclosApi;
 
-// Make a GET request
-$response = CyclosApi::get('/endpoint', ['param' => 'value']);
+// Authentication
+$response = CyclosApi::login([
+    'username' => 'user',
+    'password' => 'password'
+]);
 
-// Make a POST request
-$response = CyclosApi::post('/endpoint', ['data' => 'value']);
+// User Management
+$users = CyclosApi::searchUsers([
+    'keywords' => 'john',
+    'groups' => ['customers']
+]);
+
+// Account Management
+$balance = CyclosApi::getAccountStatus('account123');
+$history = CyclosApi::getAccountHistory('account123', [
+    'datePeriod' => ['begin' => '2023-01-01', 'end' => '2023-12-31']
+]);
+
+// Marketplace
+$ads = CyclosApi::searchAdvertisements([
+    'keywords' => 'electronics',
+    'categories' => ['tech']
+]);
 ```
+
+### Using Dependency Injection
+
+```php
+use Angstrom\CyclosApi\CyclosApi;
+
+class YourController extends Controller
+{
+    public function __construct(private CyclosApi $api)
+    {
+    }
+
+    public function getUsers()
+    {
+        return $this->api->searchUsers([
+            'status' => 'active'
+        ]);
+    }
+}
+```
+
+## Available Methods
+
+The package includes comprehensive traits for different Cyclos functionalities:
+
+- Authentication (login, logout, password management)
+- User Management (search, create, update, delete users)
+- Account Management (balances, history, transfers)
+- Marketplace Management (advertisements, favorites)
+- Payment Management
+- Transaction Management
+- Message Management
+- And more...
+
+## Testing
+
+```bash
+composer test
+```
+
+## Security
+
+If you discover any security-related issues, please email security@angstrom.dev instead of using the issue tracker.
 
 ## License
 
